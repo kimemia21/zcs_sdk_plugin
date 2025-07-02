@@ -4,11 +4,11 @@ import 'zcs_sdk_plugin_platform_interface.dart';
 
 class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   @visibleForTesting
-  final _channel = const MethodChannel('zcs_sdk_plugin');
+  final channel = const MethodChannel('zcs_sdk_plugin');
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version = await _channel.invokeMethod<String>('getPlatformVersion');
+    final version = await channel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
 
@@ -16,7 +16,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   Future<bool> initializeDevice() async {
     try {
       final Map<String, dynamic> result = Map<String, dynamic>.from(
-        await _channel.invokeMethod('initializeDevice')
+        await channel.invokeMethod('initializeDevice')
       );
       return result['success'] == true;
     } on PlatformException catch (e) {
@@ -27,7 +27,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   Future<Map<String, dynamic>> openDevice() async {
     try {
       final Map<String, dynamic> result = Map<String, dynamic>.from(
-        await _channel.invokeMethod('openDevice')
+        await channel.invokeMethod('openDevice')
       );
       return result;
     } on PlatformException catch (e) {
@@ -40,7 +40,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   Future<Map<String, dynamic>> closeDevice() async {
     try {
       final Map<String, dynamic> result = Map<String, dynamic>.from(
-        await _channel.invokeMethod('closeDevice')
+        await channel.invokeMethod('closeDevice')
       );
       return result;
     } on PlatformException catch (e) {
@@ -65,7 +65,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   }) async {
     try {
       final Map<String, dynamic> result = Map<String, dynamic>.from(
-        await _channel.invokeMethod('printText', {
+        await channel.invokeMethod('printText', {
           'text': text,
           'fontSize': fontSize,
           'isBold': isBold,
@@ -88,7 +88,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   ) async {
     try {
       final Map<String, dynamic> result = Map<String, dynamic>.from(
-        await _channel.invokeMethod('printReceipt', {
+        await channel.invokeMethod('printReceipt', {
           'receiptData': receiptData,
         })
       );
@@ -106,7 +106,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   }) async {
     try {
       final Map<String, dynamic> result = Map<String, dynamic>.from(
-        await _channel.invokeMethod('printQRCode', {
+        await channel.invokeMethod('printQRCode', {
           'data': data,
           'size': size,
           'errorCorrectionLevel': errorCorrectionLevel,
@@ -128,7 +128,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   ) async {
     try {
       final Map<String, dynamic> result = Map<String, dynamic>.from(
-        await _channel.invokeMethod('printImage', {
+        await channel.invokeMethod('printImage', {
           'imageData': imageData,
         })
       );
@@ -143,7 +143,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
  @override
   Future<String?> connectToDevice(String deviceId) async {
     try {
-      final result = await _channel.invokeMethod<String>('connectToDevice', {
+      final result = await channel.invokeMethod<String>('connectToDevice', {
         'deviceId': deviceId,
       });
       return result;
@@ -156,7 +156,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   @override
   Future<List<String>> scanForDevices() async {
     try {
-      final result = await _channel.invokeMethod<List>('scanForDevices');
+      final result = await channel.invokeMethod<List>('scanForDevices');
       return result?.cast<String>() ?? [];
     } catch (e) {
       debugPrint('Error scanning for devices: $e');
@@ -167,7 +167,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   @override
   Future<bool> sendCommand(String command) async {
     try {
-      final result = await _channel.invokeMethod<bool>('sendCommand', {
+      final result = await channel.invokeMethod<bool>('sendCommand', {
         'command': command,
       });
       return result ?? false;
@@ -180,7 +180,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   @override
   Future<String?> getDeviceInfo() async {
     try {
-      final result = await _channel.invokeMethod<String>('getDeviceInfo');
+      final result = await channel.invokeMethod<String>('getDeviceInfo');
       return result;
     } catch (e) {
       debugPrint('Error getting device info: $e');
@@ -191,7 +191,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   @override
   Future<bool> disconnect() async {
     try {
-      final result = await _channel.invokeMethod<bool>('disconnect');
+      final result = await channel.invokeMethod<bool>('disconnect');
       return result ?? false;
     } catch (e) {
       debugPrint('Error disconnecting: $e');
@@ -202,7 +202,7 @@ class MethodChannelZcsSdkPlugin extends ZcsSdkPluginPlatform {
   @override
   Future<Map<String, dynamic>?> getDeviceStatus() async {
     try {
-      final result = await _channel.invokeMethod<Map>('getDeviceStatus');
+      final result = await channel.invokeMethod<Map>('getDeviceStatus');
       return result?.cast<String, dynamic>();
     } catch (e) {
       debugPrint('Error getting device status: $e');
