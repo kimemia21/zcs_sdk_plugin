@@ -1,62 +1,115 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:zcs_sdk_plugin/zcs_sdk_plugin.dart';
+import 'package:zcs_sdk_plugin/zcs_sdk_plugin_platform_interface.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+/// Change this alias to whatever wrapper class you eventually expose.
+/// For now we call the platform interface directly.
+final ZcsSdkPluginPlatform _plugin = ZcsSdkPluginPlatform.instance;
+
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _zcsSdkPlugin = ZcsSdkPlugin();
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _zcsSdkPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
+      title: 'ZCS SDK Plugin Demo',
+      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.indigo),
+      home: const DemoPage(),
+    );
+  }
+}
+
+class DemoPage extends StatefulWidget {
+  const DemoPage({super.key});
+
+  @override
+  State<DemoPage> createState() => _DemoPageState();
+}
+
+class _DemoPageState extends State<DemoPage> {
+  String _log = '';
+  String _platformVersion = 'Unknown';
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
+    try {
+      final v = await _plugin.getPlatformVersion();
+      setState(() => _platformVersion = v ?? 'null');
+    } catch (e) {
+      setState(() => _platformVersion = 'Error: $e');
+    }
+  }
+
+  Future<void> _run(Future<dynamic> Function() call, String label) async {
+    setState(() => _log = '⏳ $label…');
+    final sw = Stopwatch()..start();
+    try {
+      final result = await call();
+      setState(() =>
+          _log = '✅ $label → ${result ?? "void"}  (${sw.elapsed.inMilliseconds} ms)');
+    } catch (e) {
+      setState(() =>
+          _log = '❌ $label threw $e  (${sw.elapsed.inMilliseconds} ms)');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('ZCS SDK Plugin Demo'),
+        // subtitle: Text('Platform: $_platformVersion'),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          ElevatedButton(
+            onPressed: () =>
+                _run(() => _plugin.initializeDevice(), 'initializeDevice'),
+            child: const Text('Initialize Device'),
+          ),
+          ElevatedButton(
+            onPressed: () => _run(() => _plugin.openDevice(), 'openDevice'),
+            child: const Text('Open Device'),
+          ),
+          ElevatedButton(
+            onPressed: () => _run(() => _plugin.printText(
+                  'Hello World ${DateTime.now()}',
+                  fontSize: 32,
+                  isBold: true,
+                  alignment: 'CENTER',
+                ), 'printText'),
+            child: const Text('Print Text'),
+          ),
+          ElevatedButton(
+            onPressed: () => _run(
+                () => _plugin.printQrCode('https://example.com'),
+                'printQrCode'),
+            child: const Text('Print QR Code'),
+          ),
+          ElevatedButton(
+            onPressed: () =>
+                _run(() => _plugin.getDeviceStatus(), 'getDeviceStatus'),
+            child: const Text('Get Device Status'),
+          ),
+          ElevatedButton(
+            onPressed: () => _run(() => _plugin.closeDevice(), 'closeDevice'),
+            child: const Text('Close Device'),
+          ),
+          const SizedBox(height: 24),
+          SelectableText(
+            _log,
+            style: const TextStyle(fontFamily: 'monospace'),
+          ),
+        ],
       ),
     );
   }

@@ -10,6 +10,84 @@ class MockZcsSdkPluginPlatform
 
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
+  
+  @override
+  Future<Map<String, dynamic>> closeDevice() {
+    // TODO: implement closeDevice
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<String?> connectToDevice(String deviceId) {
+    // TODO: implement connectToDevice
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> disconnect() {
+    // TODO: implement disconnect
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<String?> getDeviceInfo() {
+    // TODO: implement getDeviceInfo
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Map<String, dynamic>?> getDeviceStatus() {
+    // TODO: implement getDeviceStatus
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> initializeDevice() {
+    // TODO: implement initializeDevice
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Map<String, dynamic>> openDevice() {
+    // TODO: implement openDevice
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Map<String, dynamic>> printImage(String imageData) {
+    // TODO: implement printImage
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Map<String, dynamic>> printQrCode(String data, {int size = 200, String errorCorrectionLevel = "L"}) {
+    // TODO: implement printQrCode
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Map<String, dynamic>> printReceipt(Map<String, dynamic> receiptData) {
+    // TODO: implement printReceipt
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Map<String, dynamic>> printText(String text, {int fontSize = 50, bool isBold = false, bool isUnderline = false, String alignment = "LEFT"}) {
+    // TODO: implement printText
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<List<String>> scanForDevices() {
+    // TODO: implement scanForDevices
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> sendCommand(String command) {
+    // TODO: implement sendCommand
+    throw UnimplementedError();
+  }
 }
 
 void main() {

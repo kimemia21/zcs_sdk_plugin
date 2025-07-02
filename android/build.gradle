@@ -1,4 +1,5 @@
-group 'com.example.zcs_sdk_plugin'
+
+ group 'com.example.zcs_sdk_plugin'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -22,43 +23,154 @@ allprojects {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 34
+    namespace 'com.example.zcs_sdk_plugin'  // Add this line
+    // compileSdk 34
+    compileSdkVersion 33
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 34
-    }
-
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['src/main/jniLibs']
+        targetSdkVersion 33
+        
+        // Add this to support native libraries
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
     }
 
-    lintOptions {
-        disable 'InvalidPackage'
+    // This is important for including JAR files
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java']
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
     }
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.annotation:annotation:1.7.1'
+    implementation 'androidx.annotation:annotation:1.3.0'
     
-    // Add your specific SDK dependencies here
-    // If you have local JAR files:
+    // Include all JAR files in libs directory
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     
-    // Add any other dependencies your SDK needs
+    // Add these if your SDK requires them
+    implementation 'androidx.appcompat:appcompat:1.5.0' 
+    implementation 'com.google.android.material:material:1.6.1'
 }
+
+
+
+// group = "com.example.smartpos_plugin"
+// version = "1.0"
+
+// buildscript {
+//     repositories {
+//         google()
+//         mavenCentral()
+//     }
+
+//     dependencies {
+//         classpath("com.android.tools.build:gradle:8.7.0")
+//     }
+// }
+
+// rootProject.allprojects {
+//     repositories {
+//         google()
+//         mavenCentral()
+//     }
+// }
+
+// apply plugin: "com.android.library"
+
+// android {
+//     namespace = "com.example.smartpos_plugin"
+
+//     compileSdk = 35
+
+//     compileOptions {
+//         sourceCompatibility = JavaVersion.VERSION_11
+//         targetCompatibility = JavaVersion.VERSION_11
+//     }
+
+//     defaultConfig {
+//         minSdk = 21
+//     }
+
+//     dependencies {
+//         testImplementation("junit:junit:4.13.2")
+//         testImplementation("org.mockito:mockito-core:5.0.0")
+//     }
+
+//     testOptions {
+//         unitTests.all {
+//             testLogging {
+//                events "passed", "skipped", "failed", "standardOut", "standardError"
+//                outputs.upToDateWhen {false}
+//                showStandardStreams = true
+//             }
+//         }
+//     }
+// }
+
+
+
+
+
+// version = "1.0"
+
+// buildscript {
+//     repositories {
+//         google()
+//         mavenCentral()
+//     }
+
+//     dependencies {
+//         classpath("com.android.tools.build:gradle:8.7.0")
+//     }
+// }
+
+// rootProject.allprojects {
+//     repositories {
+//         google()
+//         mavenCentral()
+//     }
+// }
+
+// apply plugin: "com.android.library"
+
+// android {
+//     namespace = "com.example.zcs_sdk_plugin"
+
+//     compileSdk = 35
+
+//     compileOptions {
+//         sourceCompatibility = JavaVersion.VERSION_11
+//         targetCompatibility = JavaVersion.VERSION_11
+//     }
+
+//     defaultConfig {
+//         minSdk = 21
+//     }
+
+//     dependencies {
+//         testImplementation("junit:junit:4.13.2")
+//         testImplementation("org.mockito:mockito-core:5.0.0")
+//     }
+
+//     testOptions {
+//         unitTests.all {
+//             testLogging {
+//                events "passed", "skipped", "failed", "standardOut", "standardError"
+//                outputs.upToDateWhen {false}
+//                showStandardStreams = true
+//             }
+//         }
+//     }
+// }
